@@ -1,0 +1,42 @@
+name: Deploy to App Engine
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Keyless auth via Workload Identity Federation — no service-account JSON anywhere.
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        name: Authenticate to Google Cloud (WIF, no keys)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.WIF_SERVICE_ACCOUNT }}
+
+      - id: deploy
+        name: Deploy to App Engine
+        uses: google-github-actions/deploy-appengine@v2
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          deliverables: app.yaml
+          promote: true
+          version: v-${{ github.run_number }}
+
+      - name: Print live URL
+        run: |
+          echo "Deployed: ${{ steps.deploy.outputs.url }}"
+          echo "::notice title=Live::${{ steps.deploy.outputs.url }}"
