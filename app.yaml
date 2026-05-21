@@ -1,0 +1,33 @@
+runtime: python312
+
+# Free-tier guardrails:
+# F1 = smallest instance class (28 free hours/day baked into App Engine free tier)
+# max_instances: 1 caps concurrent instances so we cannot run >24h/day total
+# min_instances: 0 lets us scale to zero when idle (no instance hours billed)
+instance_class: F1
+automatic_scaling:
+  max_instances: 1
+  min_instances: 0
+  min_idle_instances: 0
+
+handlers:
+  - url: /style\.css
+    static_files: style.css
+    upload: style\.css
+    secure: always
+    http_headers:
+      Cache-Control: "public, max-age=3600"
+
+  - url: /app\.js
+    static_files: app.js
+    upload: app\.js
+    secure: always
+    http_headers:
+      Cache-Control: "public, max-age=3600"
+
+  - url: /.*
+    static_files: index.html
+    upload: index\.html
+    secure: always
+    http_headers:
+      Cache-Control: "public, max-age=600"

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fire, Weather, and the Systems Between</title>
+  <link rel="preconnect" href="https://gibs.earthdata.nasa.gov">
+  <link rel="preconnect" href="https://services3.arcgis.com">
+  <link rel="preconnect" href="https://api.weather.gov">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header id="topbar">
+    <div class="brand">
+      <span class="dot"></span>
+      <h1>Fire, Weather, and the Systems Between</h1>
+      <span class="subtitle">live planetary fire activity, in context</span>
+    </div>
+    <div class="lens-switcher" role="tablist" aria-label="Point of view">
+      <button class="lens active" data-lens="explorer" role="tab">Explorer</button>
+      <button class="lens" data-lens="firefighter" role="tab">Firefighter</button>
+      <button class="lens" data-lens="climatologist" role="tab">Climatologist</button>
+      <button class="lens" data-lens="resident" role="tab">Resident</button>
+    </div>
+  </header>
+
+  <main id="stage">
+    <div id="map" aria-label="Interactive fire activity map"></div>
+
+    <aside id="sidebar">
+      <section id="status">
+        <div class="stat">
+          <div class="stat-label">Active US incidents</div>
+          <div class="stat-value" id="stat-incidents">…</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Red-flag zones (US)</div>
+          <div class="stat-value" id="stat-warnings">…</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Largest fire today</div>
+          <div class="stat-value" id="stat-biggest">…</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Showing day</div>
+          <div class="stat-value" id="stat-date">today</div>
+        </div>
+      </section>
+
+      <section id="detail">
+        <!-- Filled by JS on hover/click. Default = narrative panel below. -->
+        <div id="default-panel">
+          <h2 id="panel-title">The big picture</h2>
+          <div id="panel-body"><!-- narrative content swapped per lens --></div>
+          <p class="muted">Hover or click a fire, a warning zone, or scrub the timeline to dig in.</p>
+        </div>
+      </section>
+
+      <section id="legend">
+        <h3>What you're seeing</h3>
+        <ul>
+          <li><span class="swatch heat"></span> Satellite-detected thermal anomalies (NASA VIIRS, last 24h on chosen day)</li>
+          <li><span class="swatch incident"></span> Active US wildland fire incident (NIFC) &mdash; size scaled by acreage</li>
+          <li><span class="swatch warning"></span> Active red-flag warning / fire-weather watch (NOAA NWS)</li>
+        </ul>
+      </section>
+    </aside>
+  </main>
+
+  <footer id="scrubber">
+    <button id="play" aria-label="Play timeline"><span class="play">▶</span><span class="pause">❚❚</span></button>
+    <div id="track">
+      <div id="track-fill"></div>
+      <input id="day" type="range" min="0" max="6" step="1" value="6" aria-label="Days ago">
+      <div id="day-ticks"></div>
+    </div>
+    <div id="day-label">today</div>
+  </footer>
+
+  <div id="loading" role="status">loading live data…</div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="app.js" defer></script>
+</body>
+</html>

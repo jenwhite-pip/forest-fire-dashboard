@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+
+# Local Claude Code settings (per-user)
+.claude/
+
+# Editor
+.vscode/
+.idea/
+
+# Local logs
+*.log
+
+# Local dev artifacts
+__pycache__/
+*.pyc
+
+# Never commit secrets
+*.key
+*.pem
+secrets/
+.env
+.env.*
+service-account*.json
